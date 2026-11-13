@@ -30,9 +30,8 @@ set(PROJECT_SOURCES
     src/logic/DistributionManager.cpp
     src/logic/DistributionManager.h
     
-    # --- ИНТЕРФЕЙС (раскомментируем, когда создадим) ---
-    # src/ui/MainWindow.cpp
-    # src/ui/MainWindow.h
+    src/ui/MainWindow.cpp
+    src/ui/MainWindow.h
     # src/ui/MainWindow.ui
 )
 
@@ -42,4 +41,5 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 # Привязываем библиотеку Qt Widgets к нашему проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Указываем компилятору, что папка src — это корень для наших заголовочных файлов
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
