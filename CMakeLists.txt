@@ -27,9 +27,8 @@ set(PROJECT_SOURCES
     src/models/University.cpp
     src/models/University.h
     
-    # --- ЛОГИКА (раскомментируем, когда создадим) ---
-    # src/logic/DistributionManager.cpp
-    # src/logic/DistributionManager.h
+    src/logic/DistributionManager.cpp
+    src/logic/DistributionManager.h
     
     # --- ИНТЕРФЕЙС (раскомментируем, когда создадим) ---
     # src/ui/MainWindow.cpp
