@@ -1,7 +1,7 @@
 # UniDistributor
 Проект по С++ (Qt Widgets). Распределение абитуриентов по вузам с учетом приоритета, проходных баллов и количества мест.
 
-## Сборка на Linux (Arch)
+## Сборка на Linux
 sudo pacman -S qt6-base cmake ninja
 mkdir build && cd build
 cmake .. -G Ninja
