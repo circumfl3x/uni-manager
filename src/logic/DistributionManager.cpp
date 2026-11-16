@@ -19,6 +19,10 @@ const QVector<Applicant>& DistributionManager::getApplicants() const {
     return m_applicants;
 }
 
+void DistributionManager::addUniversity(const University& uni) {
+    m_universities.append(uni);
+}
+
 const QVector<University>& DistributionManager::getUniversities() const {
     return m_universities;
 }
@@ -55,4 +59,17 @@ QVector<QPair<QString, QString>> DistributionManager::runDistribution() {
     }
 
     return results;
+}
+
+// реализация изменения приоритета кнопками
+void DistributionManager::moveUniversityUp(int index) {
+    if (index > 0 && index < m_universities.size()) {
+        std::swap(m_universities[index], m_universities[index - 1]);
+    }
+}
+
+void DistributionManager::moveUniversityDown(int index) {
+    if (index >= 0 && index < m_universities.size() - 1) {
+        std::swap(m_universities[index], m_universities[index + 1]);
+    }
 }

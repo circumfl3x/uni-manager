@@ -18,6 +18,9 @@ private slots:
     void onAddApplicantClicked();
     void onClearClicked();
     void onDistributeClicked();
+    void onAddUniversityClicked();
+    void onMoveUpClicked();
+    void onMoveDownClicked();
 
 private:
     void setupUi();
@@ -37,4 +40,12 @@ private:
     QTableWidget *m_applicantsTable;
     QTableWidget *m_universitiesTable;
     QTableWidget *m_resultsTable;
+
+    QLineEdit *m_uniNameEdit;
+    QLineEdit *m_uniScoreEdit;
+    QLineEdit *m_uniSeatsEdit;
+    QPushButton *m_addUniButton;
+
+    QPushButton *m_upButton;
+    QPushButton *m_downButton;
 };

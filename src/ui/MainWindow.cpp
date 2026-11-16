@@ -13,13 +13,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 void MainWindow::setupUi() {
     setWindowTitle("Распределение абитуриентов");
-    resize(900, 600);
+    resize(1100, 700); 
 
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
 
+    // left
     QVBoxLayout *leftLayout = new QVBoxLayout();
 
     QGroupBox *inputGroup = new QGroupBox("Добавить абитуриента");
@@ -51,12 +52,37 @@ void MainWindow::setupUi() {
 
     QVBoxLayout *rightLayout = new QVBoxLayout();
 
+    QGroupBox *uniInputGroup = new QGroupBox("Добавить университет");
+    QFormLayout *uniFormLayout = new QFormLayout(uniInputGroup);
+    
+    m_uniNameEdit = new QLineEdit();
+    m_uniScoreEdit = new QLineEdit();
+    m_uniSeatsEdit = new QLineEdit();
+    
+    uniFormLayout->addRow("Название:", m_uniNameEdit);
+    uniFormLayout->addRow("Проходной балл:", m_uniScoreEdit);
+    uniFormLayout->addRow("Кол-во мест:", m_uniSeatsEdit);
+    
+    m_addUniButton = new QPushButton("Добавить вуз"); // Сначала создаем кнопку
+    m_addUniButton->setStyleSheet("background-color: #FF9800; color: white; font-weight: bold;");
+    uniFormLayout->addRow(m_addUniButton);
+
+    rightLayout->addWidget(uniInputGroup); // Добавляем форму в правую колонку
+
     rightLayout->addWidget(new QLabel("Университеты (в порядке приоритета):"));
     m_universitiesTable = new QTableWidget(0, 4);
     m_universitiesTable->setHorizontalHeaderLabels({"Приоритет", "Вуз", "Проходной балл", "Мест"});
     m_universitiesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     m_universitiesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     rightLayout->addWidget(m_universitiesTable);
+
+    // кнопки изменения приоритета
+    QHBoxLayout *prioButtonsLayout = new QHBoxLayout();
+    m_upButton = new QPushButton("Приоритет выше");
+    m_downButton = new QPushButton("Приоритет ниже");
+    prioButtonsLayout->addWidget(m_upButton);
+    prioButtonsLayout->addWidget(m_downButton);
+    rightLayout->addLayout(prioButtonsLayout);
 
     m_distributeButton = new QPushButton("РАСПРЕДЕЛИТЬ СТУДЕНТОВ");
     m_distributeButton->setStyleSheet("background-color: #2196F3; color: white; font-weight: bold; padding: 10px; font-size: 14px;");
@@ -75,6 +101,9 @@ void MainWindow::setupUi() {
     connect(m_addButton, &QPushButton::clicked, this, &MainWindow::onAddApplicantClicked);
     connect(m_clearButton, &QPushButton::clicked, this, &MainWindow::onClearClicked);
     connect(m_distributeButton, &QPushButton::clicked, this, &MainWindow::onDistributeClicked);
+    connect(m_addUniButton, &QPushButton::clicked, this, &MainWindow::onAddUniversityClicked);
+    connect(m_upButton, &QPushButton::clicked, this, &MainWindow::onMoveUpClicked);
+    connect(m_downButton, &QPushButton::clicked, this, &MainWindow::onMoveDownClicked);
 }
 
 void MainWindow::onAddApplicantClicked() {
@@ -153,4 +182,65 @@ void MainWindow::onDistributeClicked() {
         }
         m_resultsTable->setItem(i, 1, resultItem);
     }
+}
+
+void MainWindow::onAddUniversityClicked() {
+    QString name = m_uniNameEdit->text().trimmed();
+    QString scoreStr = m_uniScoreEdit->text().trimmed();
+    QString seatsStr = m_uniSeatsEdit->text().trimmed();
+
+    if (name.isEmpty() || scoreStr.isEmpty() || seatsStr.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Необходимо заполнить все поля");
+        return;
+    }
+
+    bool okScore, okSeats;
+    int score = scoreStr.toInt(&okScore);
+    int seats = seatsStr.toInt(&okSeats);
+
+    if (!okScore || score < 0 || score > 300) {
+        QMessageBox::warning(this, "Ошибка", "Проходной балл должен быть числом от 0 до 300");
+        return;
+    }
+    
+    if (!okSeats || seats <= 0) {
+        QMessageBox::warning(this, "Ошибка", "Количество мест должно быть больше нуля");
+        return;
+    }
+
+    m_manager.addUniversity(University(name, score, seats));
+    
+    m_uniNameEdit->clear();
+    m_uniScoreEdit->clear();
+    m_uniSeatsEdit->clear();
+    
+    updateUniversitiesTable();
+}
+
+void MainWindow::onMoveUpClicked() {
+    int currentRow = m_universitiesTable->currentRow();
+    if (currentRow <= 0) {
+        QMessageBox::information(this, "Внимание", "Выбран вуз с самым высоким приоритетом");
+        return;
+    }
+    
+    m_manager.moveUniversityUp(currentRow);
+    updateUniversitiesTable();
+    
+    // Возвращаем выделение на ту же строку, чтобы можно было нажимать дальше
+    m_universitiesTable->selectRow(currentRow - 1); 
+}
+
+void MainWindow::onMoveDownClicked() {
+    int currentRow = m_universitiesTable->currentRow();
+    // Проверяем, что выбрана не последняя строка и вообще что-то выбрано
+    if (currentRow < 0 || currentRow >= m_manager.getUniversities().size() - 1) {
+        QMessageBox::information(this, "Внимание", "Выбран вуз с самым низким приоритетом");
+        return;
+    }
+    
+    m_manager.moveUniversityDown(currentRow);
+    updateUniversitiesTable();
+    
+    m_universitiesTable->selectRow(currentRow + 1);
 }

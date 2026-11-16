@@ -14,11 +14,16 @@ public:
     void clearApplicants();
     const QVector<Applicant>& getApplicants() const;
 
+    void addUniversity(const University& uni);
     const QVector<University>& getUniversities() const;
+
+    // изменение приоритета
+    void moveUniversityUp(int index);
+    void moveUniversityDown(int index);
 
     QVector<QPair<QString, QString>> runDistribution();
 
 private:
     QVector<Applicant> m_applicants;
-    QVector<University> m_universities; // Вектор хранит вузы в порядке приоритета
+    QVector<University> m_universities;
 };
