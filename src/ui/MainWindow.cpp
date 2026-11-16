@@ -58,16 +58,21 @@ void MainWindow::setupUi() {
     m_uniNameEdit = new QLineEdit();
     m_uniScoreEdit = new QLineEdit();
     m_uniSeatsEdit = new QLineEdit();
+
+    m_uniPrioSpinBox = new QSpinBox();
+    m_uniPrioSpinBox->setMinimum(1);
+    m_uniPrioSpinBox->setMaximum(99);
     
     uniFormLayout->addRow("Название:", m_uniNameEdit);
     uniFormLayout->addRow("Проходной балл:", m_uniScoreEdit);
     uniFormLayout->addRow("Кол-во мест:", m_uniSeatsEdit);
+    uniFormLayout->addRow("Приоритет (от 1):", m_uniPrioSpinBox); 
     
-    m_addUniButton = new QPushButton("Добавить вуз"); // Сначала создаем кнопку
+    m_addUniButton = new QPushButton("Добавить вуз"); 
     m_addUniButton->setStyleSheet("background-color: #FF9800; color: white; font-weight: bold;");
     uniFormLayout->addRow(m_addUniButton);
 
-    rightLayout->addWidget(uniInputGroup); // Добавляем форму в правую колонку
+    rightLayout->addWidget(uniInputGroup);
 
     rightLayout->addWidget(new QLabel("Университеты (в порядке приоритета):"));
     m_universitiesTable = new QTableWidget(0, 4);
@@ -188,6 +193,7 @@ void MainWindow::onAddUniversityClicked() {
     QString name = m_uniNameEdit->text().trimmed();
     QString scoreStr = m_uniScoreEdit->text().trimmed();
     QString seatsStr = m_uniSeatsEdit->text().trimmed();
+    int priority = m_uniPrioSpinBox->value();
 
     if (name.isEmpty() || scoreStr.isEmpty() || seatsStr.isEmpty()) {
         QMessageBox::warning(this, "Ошибка", "Необходимо заполнить все поля");
@@ -208,11 +214,13 @@ void MainWindow::onAddUniversityClicked() {
         return;
     }
 
-    m_manager.addUniversity(University(name, score, seats));
+    m_manager.insertUniversity(priority - 1, University(name, score, seats));
     
     m_uniNameEdit->clear();
     m_uniScoreEdit->clear();
     m_uniSeatsEdit->clear();
+    
+    m_uniPrioSpinBox->setValue(m_manager.getUniversities().size() + 1); 
     
     updateUniversitiesTable();
 }

@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include "logic/DistributionManager.h"
+#include <QSpinBox>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT 
@@ -48,4 +49,6 @@ private:
 
     QPushButton *m_upButton;
     QPushButton *m_downButton;
+
+    QSpinBox *m_uniPrioSpinBox;
 };

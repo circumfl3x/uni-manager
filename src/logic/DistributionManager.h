@@ -13,8 +13,7 @@ public:
     void addApplicant(const Applicant& app);
     void clearApplicants();
     const QVector<Applicant>& getApplicants() const;
-
-    void addUniversity(const University& uni);
+    void insertUniversity(int index, const University& uni);
     const QVector<University>& getUniversities() const;
 
     // изменение приоритета

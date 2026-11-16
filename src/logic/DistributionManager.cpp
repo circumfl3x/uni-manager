@@ -2,9 +2,10 @@
 #include <algorithm>
 
 DistributionManager::DistributionManager() {
-    m_universities.append(University("ИТМО", 85, 2));
-    m_universities.append(University("ЛЭТИ", 75, 3));
-    m_universities.append(University("СПбГУ", 65, 4));
+    m_universities.append(University("ИТМО", 297, 2));
+    m_universities.append(University("ЛЭТИ", 271, 3));
+    m_universities.append(University("СПбГУ", 289, 4));
+
 }
 
 void DistributionManager::addApplicant(const Applicant& app) {
@@ -17,10 +18,6 @@ void DistributionManager::clearApplicants() {
 
 const QVector<Applicant>& DistributionManager::getApplicants() const {
     return m_applicants;
-}
-
-void DistributionManager::addUniversity(const University& uni) {
-    m_universities.append(uni);
 }
 
 const QVector<University>& DistributionManager::getUniversities() const {
@@ -72,4 +69,16 @@ void DistributionManager::moveUniversityDown(int index) {
     if (index >= 0 && index < m_universities.size() - 1) {
         std::swap(m_universities[index], m_universities[index + 1]);
     }
+}
+
+void DistributionManager::insertUniversity(int index, const University& uni) {
+    // Если приоритет больше, чем всего вузов, ставим в конец
+    if (index > m_universities.size()) {
+        index = m_universities.size();
+    }
+    // Если меньше нуля, ставим в начало
+    if (index < 0) {
+        index = 0;
+    }
+    m_universities.insert(index, uni);
 }
