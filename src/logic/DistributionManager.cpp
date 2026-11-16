@@ -5,8 +5,14 @@ DistributionManager::DistributionManager() {
     m_universities.append(University("ИТМО", 297, 2));
     m_universities.append(University("ЛЭТИ", 271, 3));
     m_universities.append(University("СПбГУ", 289, 4));
-
+    
+    m_applicants.append(Applicant("Иван Иванов", "Казахстан", 300));
+    m_applicants.append(Applicant("Анна Смирнова", "Беларусь", 295));
+    m_applicants.append(Applicant("Пол Кагаме", "Руанда", 285));
+    m_applicants.append(Applicant("Алёна Коптева", "Россия", 260));
+    m_applicants.append(Applicant("Алексей Смирнов", "Беларусь", 299));
 }
+
 
 void DistributionManager::addApplicant(const Applicant& app) {
     m_applicants.append(app);

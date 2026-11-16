@@ -9,6 +9,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUi();
     updateUniversitiesTable(); 
+    updateApplicantsTable();
 }
 
 void MainWindow::setupUi() {
