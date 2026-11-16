@@ -2,9 +2,6 @@
 #include <algorithm>
 
 DistributionManager::DistributionManager() {
-    // Заполняем фиксированный список вузов.
-    // Порядок добавления = порядок приоритета!
-    // (Название, Проходной балл, Кол-во мест)
     m_universities.append(University("ИТМО", 85, 2));
     m_universities.append(University("ЛЭТИ", 75, 3));
     m_universities.append(University("СПбГУ", 65, 4));
@@ -27,12 +24,11 @@ const QVector<University>& DistributionManager::getUniversities() const {
 }
 
 QVector<QPair<QString, QString>> DistributionManager::runDistribution() {
-    // 1. Сбрасываем счетчики зачисленных в вузах (на случай повторного запуска)
     for (auto& uni : m_universities) {
         uni.reset();
     }
 
-    // 2. Делаем копию абитуриентов и сортируем по убыванию балла
+    // Делаем копию абитуриентов и сортируем по убыванию балла
     QVector<Applicant> sortedApplicants = m_applicants;
     std::sort(sortedApplicants.begin(), sortedApplicants.end(), 
         [](const Applicant& a, const Applicant& b) {
@@ -42,18 +38,18 @@ QVector<QPair<QString, QString>> DistributionManager::runDistribution() {
 
     QVector<QPair<QString, QString>> results;
 
-    // 3. Идем по отсортированному списку и распределяем
+    // Идем по отсортированному списку и распределяем
     for (const auto& app : sortedApplicants) {
         bool isEnrolled = false;
 
         // Идем по вузам в порядке приоритета (как они лежат в m_universities)
         for (auto& uni : m_universities) {
-            // Если балл проходит и есть места — зачисляем
+            // Если балл проходит и есть места - зачисляем
             if (uni.isPassing(app.getScore()) && uni.hasSpace()) {
                 uni.enrollStudent();
                 results.append({app.getName(), uni.getName()});
                 isEnrolled = true;
-                break; // Зачислили — переходим к следующему абитуриенту
+                break; // Зачислили - переходим к следующему абитуриенту
             }
         }
 
