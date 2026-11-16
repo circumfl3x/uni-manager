@@ -118,14 +118,14 @@ void MainWindow::onAddApplicantClicked() {
     QString scoreStr = m_scoreEdit->text().trimmed();
 
     if (name.isEmpty() || country.isEmpty() || scoreStr.isEmpty()) {
-        QMessageBox::warning(this, "Ошибка", "Заполните все поля!");
+        QMessageBox::warning(this, "Ошибка", "Заполните все поля");
         return;
     }
 
     bool ok;
     int score = scoreStr.toInt(&ok);
     if (!ok || score < 0 || score > 300) { // макс балл 300
-        QMessageBox::warning(this, "Ошибка", "Балл должен быть числом от 0 до 300!");
+        QMessageBox::warning(this, "Ошибка", "Балл должен быть числом от 0 до 300");
         return;
     }
 
