@@ -21,12 +21,10 @@ int University::getEnrolled() const {
 }
 
 bool University::isPassing(int applicantScore) const {
-    // Балл абитуриента должен быть больше или равен проходному
     return applicantScore >= m_passingScore;
 }
 
 bool University::hasSpace() const {
-    // Мест больше, чем уже зачислено
     return m_enrolled < m_seats;
 }
 

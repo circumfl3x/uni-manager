@@ -28,32 +28,27 @@ QVector<QPair<QString, QString>> DistributionManager::runDistribution() {
         uni.reset();
     }
 
-    // Делаем копию абитуриентов и сортируем по убыванию балла
     QVector<Applicant> sortedApplicants = m_applicants;
     std::sort(sortedApplicants.begin(), sortedApplicants.end(), 
         [](const Applicant& a, const Applicant& b) {
-            return a.getScore() > b.getScore(); // По убыванию
+            return a.getScore() > b.getScore();
         }
     );
 
     QVector<QPair<QString, QString>> results;
 
-    // Идем по отсортированному списку и распределяем
     for (const auto& app : sortedApplicants) {
         bool isEnrolled = false;
 
-        // Идем по вузам в порядке приоритета (как они лежат в m_universities)
         for (auto& uni : m_universities) {
-            // Если балл проходит и есть места - зачисляем
             if (uni.isPassing(app.getScore()) && uni.hasSpace()) {
                 uni.enrollStudent();
                 results.append({app.getName(), uni.getName()});
                 isEnrolled = true;
-                break; // Зачислили - переходим к следующему абитуриенту
+                break;
             }
         }
 
-        // Если ни в один вуз не прошёл
         if (!isEnrolled) {
             results.append({app.getName(), "Не зачислен"});
         }
